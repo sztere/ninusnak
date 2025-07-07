@@ -1,0 +1,323 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Playfair Display', serif; /* Új betűtípus */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: transparent;
+    position: relative;
+    color: white;
+}
+
+/* Háttér animáció */
+.background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Több szín és irány a dinamikusabb átmenethez */
+    background: linear-gradient(135deg, #FF69B4, #8A2BE2, #EE82EE, #FFA07A, #ADD8E6);
+    background-size: 400% 400%; /* Még nagyobb méret a simább mozgásért */
+    animation: gradient-flow 25s ease-in-out infinite alternate;
+    z-index: -3;
+    filter: brightness(1.05) saturate(1.1); /* Kicsit élénkebb színek */
+}
+
+@keyframes gradient-flow {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+/* Részecskék konténer */
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+    overflow: hidden; /* Elrejti a képernyőn kívül eső részecskéket */
+}
+
+/* Egyedi részecske stílusok (JS generálja ezeket) */
+.particle {
+    position: absolute;
+    border-radius: 50%; /* Alapértelmezett kör */
+    background: rgba(255, 255, 255, 0.6);
+    animation: particle-float 15s infinite ease-in-out alternate, particle-flicker 3s infinite alternate;
+    opacity: 0; /* Kezdetben rejtett, JS animálja be */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Különböző részecske típusok */
+.particle.type-star {
+    border-radius: 0;
+    transform: rotate(45deg); /* Csillag forma */
+    background: radial-gradient(circle, #FFF, #FFD700);
+    box-shadow: 0 0 10px #FFD700;
+}
+.particle.type-square {
+    border-radius: 5px;
+    background: rgba(255, 105, 180, 0.5); /* Rózsaszín */
+    box-shadow: 0 0 5px rgba(255, 105, 180, 0.7);
+}
+
+
+@keyframes particle-float {
+    0% { transform: translate(0, 0) scale(0.8); opacity: 0.6; }
+    25% { transform: translate(15vw, -10vh) scale(1.0); opacity: 0.8; }
+    50% { transform: translate(0, 20vh) scale(1.2); opacity: 0.7; }
+    75% { transform: translate(-10vw, -5vh) scale(0.9); opacity: 0.5; }
+    100% { transform: translate(0, 0) scale(0.8); opacity: 0.6; }
+}
+
+@keyframes particle-flicker {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+}
+
+
+/* Fő üzenet/vers stílusa */
+.main-message-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    animation: text-fade-in 3s ease-out forwards;
+    animation-delay: 1s;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    transition: all 0.5s ease;
+}
+
+.main-title {
+    font-family: 'Dancing Script', cursive; /* Kézírásos betűtípus */
+    font-size: 3.8em;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    background: linear-gradient(45deg, #FFD700, #FF69B4, #EE82EE); /* Arany-rózsaszín-lila átmenet */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 2s infinite alternate, letter-space-pulse 5s infinite alternate;
+    line-height: 1.2;
+}
+
+.main-poem {
+    font-size: 1.6em;
+    line-height: 1.8;
+    max-width: 650px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); /* Finom árnyék */
+}
+
+@keyframes text-fade-in {
+    from { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 215, 0, 0.6); }
+    to { text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 215, 0, 0.8); }
+}
+
+@keyframes letter-space-pulse {
+    0%, 100% { letter-spacing: 3px; }
+    50% { letter-spacing: 5px; }
+}
+
+/* Gömbök konténer */
+.orbs-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Alap gömb stílus (JS generálja ezeket) */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    animation: orb-pulse 3s infinite alternate, orb-float 15s infinite ease-in-out alternate;
+    will-change: transform, opacity, box-shadow; /* Teljesítmény optimalizálás */
+}
+
+.orb:hover {
+    transform: scale(1.2) rotate(10deg);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 60px rgba(138, 43, 226, 0.8);
+    filter: brightness(1.2);
+}
+
+/* Különböző gömb dizájnok (JS adja hozzá ezeket az osztályokat) */
+.orb.design-1 {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.7), rgba(138, 43, 226, 0.8));
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(138, 43, 226, 0.6);
+}
+
+.orb.design-2 {
+    background: radial-gradient(circle at center, rgba(255, 240, 245, 0.7), rgba(255, 105, 180, 0.8)); /* Halvány rózsaszín */
+    box-shadow: 0 0 20px rgba(255, 240, 245, 0.8), 0 0 40px rgba(255, 105, 180, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.orb.design-3 {
+    background: radial-gradient(circle at center, rgba(255, 223, 0, 0.7), rgba(255, 165, 0, 0.8)); /* Arany-narancs */
+    box-shadow: 0 0 20px rgba(255, 223, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6);
+    filter: blur(0.5px); /* Enyhe elmosódás */
+}
+
+/* Gömb animációk */
+@keyframes orb-pulse {
+    0% { transform: scale(1); opacity: 0.9; }
+    100% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes orb-float {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(10px, 15px); }
+    50% { transform: translate(-5px, 0); }
+    75% { transform: translate(8px, -10px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes orb-shine {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(255, 255, 255, 0.3); } /* Felvillanás */
+}
+
+/* Idézet megjelenítő ablak (modal) */
+.quote-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75); /* Kicsit sötétebb áttetsző háttér */
+    backdrop-filter: blur(5px); /* Enyhe elmosódás a háttérnek */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.quote-modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.quote-content {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(240, 240, 255, 0.95));
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(138, 43, 226, 0.6);
+    text-align: center;
+    max-width: 550px;
+    position: relative;
+    transform: scale(0.7); /* Kezdeti méret animációhoz */
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Ruganyosabb beúszás */
+    color: #333;
+    border: 2px solid #8A2BE2; /* Keret */
+    animation: quote-content-glow 2s infinite alternate;
+}
+
+.quote-modal.visible .quote-content {
+    transform: scale(1);
+}
+
+@keyframes quote-content-glow {
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(138, 43, 226, 0.6); }
+    50% { box-shadow: 0 0 40px rgba(255, 255, 255, 1), 0 0 80px rgba(255, 105, 180, 0.8); }
+}
+
+#quote-text {
+    font-family: 'Dancing Script', cursive; /* Kézírásos betűtípus */
+    font-size: 2.2em; /* Nagyobb idézet szöveg */
+    line-height: 1.4;
+    font-style: italic;
+    margin-bottom: 25px;
+    color: #4B0082; /* Sötétebb lila szín */
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em; /* Nagyobb X gomb */
+    color: #8A2BE2;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: #FF69B4;
+    transform: rotate(90deg); /* Elforgatás lebegéskor */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Reszponzív design */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2.8em;
+    }
+    .main-poem {
+        font-size: 1.3em;
+        max-width: 90%;
+    }
+    .orb {
+        width: 70px;
+        height: 70px;
+    }
+    .quote-content {
+        padding: 30px;
+        max-width: 90%;
+    }
+    #quote-text {
+        font-size: 1.8em;
+    }
+    .close-modal-btn {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 2em;
+    }
+    .main-poem {
+        font-size: 1.1em;
+    }
+    .orb {
+        width: 50px;
+        height: 50px;
+    }
+    .quote-content {
+        padding: 20px;
+    }
+    #quote-text {
+        font-size: 1.4em;
+    }
+    .close-modal-btn {
+        font-size: 1.3em;
+    }
+}
